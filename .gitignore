@@ -35,3 +35,7 @@ bin
 *.layout
 *.depends
 obj
+
+# ASSIGNMENT
+README.txt
+.prettierrc
