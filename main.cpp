@@ -206,10 +206,10 @@ int main()
 
     return 0;
 }
+
 /*prints the rules from the file rules.txt*/
 void printRules(ifstream &current_file)
 {
-
     string current_line;
     char ch;
 
