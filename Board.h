@@ -17,14 +17,16 @@ public:
     Board();
     ~Board();
 
-    bool in_range(Pos p) const;
+    std::vector<std::vector<Piece *>> get_board() const;
+
+    bool is_in_range(Pos p) const;
     Piece *get(Pos p) const;
     void set(Pos p, Piece *piece);
     bool is_empty(Pos p) const;
 
-    bool move(Player &player, Pos from, Pos to);
+    void move(Pos from, Pos to);
     void print_board() const;
-    bool game_over() const;
+    int game_over() const;
 };
 
 #endif

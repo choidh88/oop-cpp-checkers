@@ -3,16 +3,19 @@
 
 #include <string>
 
-class Player {
+class Player
+{
     std::string name;
     int number;
-    int pieces_won;
+    int won_pieces;
+
 public:
     Player(std::string name = "", int number = 0);
     std::string get_name() const;
     int get_number() const;
-    int get_pieces_won() const;
+    int get_won_pieces() const;
     void set_name(std::string n);
+    void set_number(int n);
     void add_win();
 };
 
