@@ -11,6 +11,7 @@ Board::Board(int rows, int cols)
     this->cols = cols;
     board.resize(rows, vector<Piece *>(cols, nullptr));
 
+    // add men to board
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < cols; j++)
             if ((i + j) % 2 == 1)
@@ -86,9 +87,9 @@ void Board::print_board() const
     cout << endl;
     cout << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
-    cout << player1.get_name() << endl;
+    cout << "[ " << player1.get_name() << " ]" << endl;
     cout << endl;
-    cout << "WON PIECES :" << player1.get_won_pieces() << endl;
+    cout << "WON PIECES : " << player1.get_won_pieces() << endl;
     cout << endl;
     cout << "   +";
     for (int j = 0; j < cols; j++)
@@ -115,10 +116,11 @@ void Board::print_board() const
     cout << "     ";
     for (int i = 0; i < rows; i++)
         cout << i << "   ";
+    cout << endl
+         << endl;
+    cout << "[ " << player2.get_name() << " ]" << endl;
     cout << endl;
-    cout << player2.get_name() << endl;
-    cout << endl;
-    cout << "WON PIECES :" << player2.get_won_pieces() << endl;
+    cout << "WON PIECES : " << player2.get_won_pieces() << endl;
     cout << endl;
 }
 

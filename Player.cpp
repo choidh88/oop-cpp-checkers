@@ -1,7 +1,10 @@
 #include "Player.h"
+#include <algorithm>
 
 Player::Player(std::string name, int number)
 {
+    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+
     this->name = name;
     this->number = number;
     this->won_pieces = 0;
@@ -24,6 +27,7 @@ int Player::get_won_pieces() const
 
 void Player::set_name(std::string n)
 {
+    std::transform(n.begin(), n.end(), n.begin(), ::toupper);
     name = n;
 }
 
