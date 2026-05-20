@@ -1,10 +1,11 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "Piece.h"
 #include "Pos.h"
 #include "Player.h"
 #include <vector>
+
+class Piece;
 
 class Board
 {
@@ -14,7 +15,7 @@ class Board
 public:
     Player players[2];
 
-    Board();
+    Board(int rows = 8, int cols = 8);
     ~Board();
 
     std::vector<std::vector<Piece *>> get_board() const;

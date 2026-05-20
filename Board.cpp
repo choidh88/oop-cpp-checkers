@@ -1,12 +1,25 @@
 #include "Board.h"
+#include "Piece.h"
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-Board::Board()
+Board::Board(int rows, int cols)
 {
+    this->rows = rows;
+    this->cols = cols;
     board.resize(rows, vector<Piece *>(cols, nullptr));
+
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < cols; j++)
+            if ((i + j) % 2 == 1)
+                board[i][j] = new Man(1);
+
+    for (int i = rows - 1; i >= rows - 3; i--)
+        for (int j = 0; j < cols; j++)
+            if ((i + j) % 2 == 1)
+                board[i][j] = new Man(2);
 }
 
 Board::~Board()
@@ -70,18 +83,13 @@ void Board::print_board() const
 {
     Player player1 = players[0], player2 = players[1];
 
-    cout << endl
-         << endl
-         << endl;
-    cout << " \t\t\t\t\t\t\t\t   " << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
-    cout << "\t\t\t\t\t\t\t\t\t" << player1.get_name() << endl;
+    cout << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
-    cout << "\t\t\t\t\t\t\t\t    WON PIECES :" << player1.get_won_pieces() << endl;
-    cout << endl
-         << endl
-         << endl;
-    cout << "\t\t\t\t\t\t\t";
+    cout << player1.get_name() << endl;
+    cout << endl;
+    cout << "WON PIECES :" << player1.get_won_pieces() << endl;
+    cout << endl;
     cout << "   +";
     for (int j = 0; j < cols; j++)
         cout << "---+";
@@ -89,31 +97,28 @@ void Board::print_board() const
 
     for (int i = 0; i < rows; ++i)
     {
-        cout << "\t\t\t\t\t\t\t";
         cout << " " << i << " |";
         for (int j = 0; j < cols; j++)
         {
-            cout << " " << board[i][j]->get_symbol() << " |";
+            if (board[i][j] == nullptr)
+                cout << " " << ' ' << " |";
+            else
+                cout << " " << board[i][j]->get_symbol() << " |";
         }
 
         cout << endl;
-        cout << "\t\t\t\t\t\t\t";
         cout << "   +";
         for (int j = 0; j < cols; j++)
             cout << "---+";
         cout << endl;
     }
-    cout << "\t\t\t\t\t\t\t";
     cout << "     ";
     for (int i = 0; i < rows; i++)
         cout << i << "   ";
-    cout << endl
-         << endl
-         << endl
-         << endl;
-    cout << "\t\t\t\t\t\t\t\t\t" << player2.get_name() << endl;
     cout << endl;
-    cout << "\t\t\t\t\t\t\t\t    WON PIECES :" << player2.get_won_pieces() << endl;
+    cout << player2.get_name() << endl;
+    cout << endl;
+    cout << "WON PIECES :" << player2.get_won_pieces() << endl;
     cout << endl;
 }
 

@@ -1,4 +1,5 @@
 #include "Piece.h"
+#include "Board.h"
 
 Piece::Piece(int num, bool is_king)
 {

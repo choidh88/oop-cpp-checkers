@@ -2,8 +2,9 @@
 #define __PIECE_H__
 
 #include "Pos.h"
-#include "Board.h"
 #include <iostream>
+
+class Board;
 
 class Piece
 {
@@ -13,6 +14,7 @@ protected:
 
 public:
     Piece(int num, bool is_king);
+    virtual ~Piece() = default;
     virtual char get_symbol() const = 0;
     bool is_king_piece() const;
     virtual bool can_move(Board &board, Pos from, Pos to) const = 0;
