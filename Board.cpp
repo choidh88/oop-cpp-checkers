@@ -87,7 +87,7 @@ void Board::print_board() const
     cout << endl;
     cout << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
-    cout << "[ " << player1.get_name() << " ]" << endl;
+    cout << "[ WHITE: " << player1.get_name() << " ]" << endl;
     cout << endl;
     cout << "WON PIECES : " << player1.get_won_pieces() << endl;
     cout << endl;
@@ -98,7 +98,7 @@ void Board::print_board() const
 
     for (int i = 0; i < rows; ++i)
     {
-        cout << " " << i << " |";
+        cout << " " << (i >= 10 ? (char)(i - 10 + 'A') : (char)(i + '0')) << " |";
         for (int j = 0; j < cols; j++)
         {
             if (board[i][j] == nullptr)
@@ -114,11 +114,13 @@ void Board::print_board() const
         cout << endl;
     }
     cout << "     ";
-    for (int i = 0; i < rows; i++)
-        cout << i << "   ";
+
+    for (int i = 0; i < cols; i++)
+        cout << (char)(i + 'A') << "   ";
+
     cout << endl
          << endl;
-    cout << "[ " << player2.get_name() << " ]" << endl;
+    cout << "[ RED: " << player2.get_name() << " ]" << endl;
     cout << endl;
     cout << "WON PIECES : " << player2.get_won_pieces() << endl;
     cout << endl;
