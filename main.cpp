@@ -4,6 +4,7 @@
 #include "Piece.h"
 #include "Player.h"
 #include "Pos.h"
+#include <conio.h>
 #include <limits>
 
 using namespace std;
@@ -15,6 +16,8 @@ int main()
     int rows, cols;
 
     clear();
+
+    cout << "[ WELCOME TO CHECKERS FOR WINDOWS ]" << endl;
 
     // input board size and make a board instance.
     cout << "INPUT BOARD'S ROWS(7-16): ";
@@ -47,23 +50,22 @@ int main()
     {
         clear();
 
-        Player &turnPlayer = board.players[turn % 2];
+        Player &turn_player = board.players[turn % 2];
 
         board.print_board();
         cout << "----------" << endl;
-        cout << turnPlayer.get_name() << "'S TURN" << endl;
+        cout << "(" << (turn_player.get_number() == 1 ? "WHITE" : "RED") << ") " << turn_player.get_name() << "'S TURN" << endl;
 
         cout << "FROM: ";
         string from_coordinates;
         getline(cin >> ws, from_coordinates);
         Pos from = Pos::interpret_coordinates(from_coordinates);
 
-        if (!board.is_in_range(from) || board.is_empty(from) || board.get(from)->get_player_number() != turnPlayer.get_number())
+        if (!board.is_in_range(from) || board.is_empty(from) || board.get(from)->get_player_number() != turn_player.get_number())
         {
             cout << "THERE IS NO MY PIECE." << endl
                  << "enter a character to continue...";
-            char a;
-            cin >> a;
+            getch();
             continue;
         }
 
@@ -74,12 +76,11 @@ int main()
 
         Piece &from_piece = *board.get(from);
 
-        if (!board.is_in_range(to) || !board.is_in_range(to) || board.get(to)->get_player_number() != turnPlayer.get_number())
+        if (!board.is_in_range(to))
         {
             cout << "THERE IS NO MY PIECE." << endl
                  << "enter a character to continue...";
-            char c;
-            cin.get(c); // TODO: APPLY GETCH
+            getch();
             continue;
         }
 
@@ -87,8 +88,7 @@ int main()
         {
             cout << "CANNOT MOVE THAT WAY." << endl
                  << "enter a character to continue...";
-            char c;
-            cin.get(c);
+            getch();
             continue;
         }
 

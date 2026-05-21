@@ -40,15 +40,29 @@ bool Man::can_move(Board &board, Pos from, Pos to) const
     if (!board.is_in_range(from) || !board.is_in_range(to))
         return false;
 
-    int j = from.get_x(), k = from.get_y(), l = to.get_x(), m = to.get_y();
+    int dr = to.get_x() - from.get_x();
+    int dc = to.get_y() - from.get_y();
+    int adr = (dr > 0) ? dr : -dr;
+    int adc = (dc > 0) ? dc : -dc;
 
-    if (j - l == -1 || j - l == 1)
-        if (k - m == 1 || k - m == -1)
-            return true;
+    if (adr != adc || adr == 0)
+        return false;
 
-    if (j - l == -2 || j - l == 2)
-        if (k - m == -2 || k - m == 2)
-            return true;
+    if (adr == 1)
+        return board.is_empty(to);
+
+    if (adr == 2)
+    {
+        if (!board.is_empty(to))
+            return false;
+
+        Pos mid(from.get_x() + dr / 2, from.get_y() + dc / 2);
+
+        if (board.is_empty(mid))
+            return false;
+
+        return true;
+    }
 
     return false;
 }
