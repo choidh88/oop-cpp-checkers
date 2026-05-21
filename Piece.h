@@ -18,6 +18,7 @@ public:
     virtual char get_symbol() const = 0;
     bool is_king_piece() const;
     virtual bool can_move(Board &board, Pos from, Pos to) const = 0;
+    int get_player_number();
 };
 
 class Man : public Piece

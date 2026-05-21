@@ -25,7 +25,7 @@ public:
     void set(Pos p, Piece *piece);
     bool is_empty(Pos p) const;
 
-    void move(Pos from, Pos to);
+    int move(Pos from, Pos to);
     void print_board() const;
     int game_over() const;
 };

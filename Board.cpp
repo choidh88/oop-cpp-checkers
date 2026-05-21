@@ -55,29 +55,66 @@ bool Board::is_empty(Pos p) const
     return get(p) == nullptr;
 }
 
-void Board::move(Pos from, Pos to)
+int Board::move(Pos from, Pos to)
 {
     if (!is_in_range(from) || !is_in_range(to))
     {
         cout << "Out of range\n";
-        return;
+        return -1;
     }
 
     Piece *p = get(from);
     if (!p)
     {
         cout << "No piece at source\n";
-        return;
+        return -1;
     }
 
     if (!p->can_move(*this, from, to))
     {
         cout << "Invalid move\n";
-        return;
+        return -1;
     }
 
     set(to, p);
     set(from, nullptr);
+
+    int player = p->get_player_number();
+    int dr = to.get_x() - from.get_x();
+    int dc = to.get_y() - from.get_y();
+    int steps = dr > 0 ? dr : -dr;
+
+    if (steps > 1)
+    {
+        int row_step = dr > 0 ? 1 : -1;
+        int col_step = dc > 0 ? 1 : -1;
+        for (int s = 1; s < steps; s++)
+        {
+            Pos mid(from.get_x() + s * row_step, from.get_y() + s * col_step);
+            Piece *mid_piece = get(mid);
+            if (mid_piece && mid_piece->get_player_number() != player)
+            {
+                delete mid_piece;
+                set(mid, nullptr);
+                players[player - 1].add_win();
+                break;
+            }
+        }
+    }
+
+    if (!p->is_king_piece())
+    {
+        int player = p->get_player_number();
+        bool promoted = (player == 1 && to.get_x() == rows - 1) ||
+                        (player == 2 && to.get_x() == 0);
+        if (promoted)
+        {
+            set(to, new King(player));
+            delete p;
+        }
+    }
+
+    return 1;
 }
 
 void Board::print_board() const

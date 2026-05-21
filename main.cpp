@@ -58,11 +58,9 @@ int main()
         getline(cin >> ws, from_coordinates);
         Pos from = Pos::interpret_coordinates(from_coordinates);
 
-        cout << from.get_x() << ' ' << from.get_y() << endl;
-
-        if (!board.is_in_range(from) || board.is_empty(from))
+        if (!board.is_in_range(from) || board.is_empty(from) || board.get(from)->get_player_number() != turnPlayer.get_number())
         {
-            cout << "THERE IS NO PIECE." << endl
+            cout << "THERE IS NO MY PIECE." << endl
                  << "enter a character to continue...";
             char a;
             cin >> a;
@@ -74,20 +72,18 @@ int main()
         getline(cin >> ws, to_coordinates);
         Pos to = Pos::interpret_coordinates(to_coordinates);
 
-        cout << to.get_x() << ' ' << to.get_y() << endl;
+        Piece &from_piece = *board.get(from);
 
-        Piece &fromPiece = *board.get(from);
-
-        if (!board.is_in_range(to))
+        if (!board.is_in_range(to) || !board.is_in_range(to) || board.get(to)->get_player_number() != turnPlayer.get_number())
         {
-            cout << "THERE IS NO PIECE." << endl
+            cout << "THERE IS NO MY PIECE." << endl
                  << "enter a character to continue...";
             char a;
             cin >> a;
             continue;
         }
 
-        if (!fromPiece.can_move(board, from, to))
+        if (!from_piece.can_move(board, from, to))
         {
             cout << "CANNOT MOVE THAT WAY." << endl
                  << "enter a character to continue...";

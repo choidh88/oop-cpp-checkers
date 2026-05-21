@@ -14,6 +14,11 @@ bool Piece::is_king_piece() const
     return is_king;
 }
 
+int Piece::get_player_number()
+{
+    return player_number;
+}
+
 Man::Man(int num) : Piece(num, false)
 {
 }
