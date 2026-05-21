@@ -78,8 +78,8 @@ int main()
         {
             cout << "THERE IS NO MY PIECE." << endl
                  << "enter a character to continue...";
-            char a;
-            cin >> a;
+            char c;
+            cin.get(c); // TODO: APPLY GETCH
             continue;
         }
 
@@ -87,8 +87,8 @@ int main()
         {
             cout << "CANNOT MOVE THAT WAY." << endl
                  << "enter a character to continue...";
-            char a;
-            cin >> a;
+            char c;
+            cin.get(c);
             continue;
         }
 
