@@ -14,7 +14,7 @@ bool Piece::is_king_piece() const
     return is_king;
 }
 
-int Piece::get_player_number()
+int Piece::get_player_number() const
 {
     return player_number;
 }

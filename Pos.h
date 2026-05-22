@@ -12,6 +12,7 @@ public:
     int get_y() const;
 
 public:
+    // interpret coordinates from string to Pos instance.
     static Pos interpret_coordinates(std::string coordinate);
 };
 
