@@ -90,30 +90,36 @@ bool King::can_move(Board &board, Pos from, Pos to) const
 
     int j = from.get_x(), k = from.get_y();
     int l = to.get_x(), m = to.get_y();
-    int dr = l - j, dc = m - k;
 
-    // 대각선 이동인지 확인 (|dr| == |dc|, dr != 0)
+    // sign tells which direction.
+    int dr = l - j; // row diff (to - from)
+    int dc = m - k; // col diff (to - from)
+
+    // check if it is diagonal movement. (|dr| == |dc|, dr != 0)
     if (dr == 0 || dr * dr != dc * dc)
         return false;
 
-    // 목적지가 비어있어야 함
+    // destination must be empty.
     if (!board.is_empty(to))
         return false;
 
+    // +1 or -1: one step in the moving direction along each axis.
     int row_step = dr > 0 ? 1 : -1;
     int col_step = dc > 0 ? 1 : -1;
     int steps = dr * row_step; // |dr|
 
-    // 경로 위 상대 말 1개까지만 허용, 아군 말은 불가
+    // jumping
+    // walk each square between from and to.
+    // king can jump over at most one opponent; own piece blocks it.
     int opponent_count = 0;
     for (int step = 1; step < steps; step++)
     {
-        Pos cur(j + step * row_step, k + step * col_step);
-        if (!board.is_empty(cur))
+        Pos current_pos(j + step * row_step, k + step * col_step);
+        if (!board.is_empty(current_pos))
         {
-            char sym = board.get(cur)->get_symbol();
-            bool is_opponent = (player_number == 1) ? (sym == 'r' || sym == 'R')
-                                                    : (sym == 'w' || sym == 'W');
+            char symbol = board.get(current_pos)->get_symbol();
+            bool is_opponent = (player_number == 1) ? (symbol == 'r' || symbol == 'R')
+                                                    : (symbol == 'w' || symbol == 'W');
             if (!is_opponent)
                 return false;
             if (++opponent_count > 1)

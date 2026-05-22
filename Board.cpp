@@ -11,12 +11,13 @@ Board::Board(int rows, int cols)
     this->cols = cols;
     board.resize(rows, vector<Piece *>(cols, nullptr));
 
-    // add men to board
+    // add player1's men to board
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < cols; j++)
             if ((i + j) % 2 == 1)
                 board[i][j] = new Man(1);
 
+    // print player2's status.
     for (int i = rows - 1; i >= rows - 3; i--)
         for (int j = 0; j < cols; j++)
             if ((i + j) % 2 == 1)
@@ -76,18 +77,22 @@ int Board::move(Pos from, Pos to)
         return -1;
     }
 
+    // move the piece.
     set(to, p);
     set(from, nullptr);
 
     int player = p->get_player_number();
-    int dr = to.get_x() - from.get_x();
-    int dc = to.get_y() - from.get_y();
-    int steps = dr > 0 ? dr : -dr;
+    int dr = to.get_x() - from.get_x(); // row diff (to - from)
+    int dc = to.get_y() - from.get_y(); // col diff (to - from)
+    int steps = dr > 0 ? dr : -dr;      // |dr|
 
+    // if it was a jump, remove any captured opponent piece along the path.
     if (steps > 1)
     {
+        // +1 or -1: one step in the moving direction along each axis.
         int row_step = dr > 0 ? 1 : -1;
         int col_step = dc > 0 ? 1 : -1;
+        // walk each square between from and to, remove the first jumped opponent.
         for (int s = 1; s < steps; s++)
         {
             Pos mid(from.get_x() + s * row_step, from.get_y() + s * col_step);
@@ -102,6 +107,7 @@ int Board::move(Pos from, Pos to)
         }
     }
 
+    // promote man to king if it reached the other end.
     if (!p->is_king_piece())
     {
         int player = p->get_player_number();
@@ -121,11 +127,16 @@ void Board::print_board() const
 {
     Player player1 = players[0], player2 = players[1];
 
+    // print title.
     cout << endl;
     cout << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
+
+    // print player1's status.
     cout << "[ WHITE: " << player1.get_name() << ", WON PIECES : " << player1.get_won_pieces() << " ]" << endl;
     cout << endl;
+
+    // print the board.
     cout << "   +";
     for (int j = 0; j < cols; j++)
         cout << "---+";
@@ -133,9 +144,11 @@ void Board::print_board() const
 
     for (int i = 0; i < rows; ++i)
     {
+        // print row-coordinate.
         cout << " " << (i >= 10 ? (char)(i - 10 + 'A') : (char)(i + '0')) << " |";
         for (int j = 0; j < cols; j++)
         {
+            // print if there is a piece, print it.
             if (board[i][j] == nullptr)
                 cout << " " << ' ' << " |";
             else
@@ -150,9 +163,11 @@ void Board::print_board() const
     }
     cout << "     ";
 
+    // print col-coordinate.
     for (int i = 0; i < cols; i++)
         cout << (char)(i + 'A') << "   ";
 
+    // print player2's status.
     cout << endl
          << endl;
     cout << "[ RED: " << player2.get_name() << ", WON PIECES : " << player2.get_won_pieces() << " ]" << endl;
