@@ -9,6 +9,8 @@
 
 using namespace std;
 
+Board before;
+
 void clear();
 
 int main()
@@ -46,6 +48,7 @@ int main()
     board.players[1].set_number(2);
 
     int turn = 0;
+    bool is_undone_turn = false;
     while (board.game_over() == -1)
     {
         clear();
@@ -56,9 +59,27 @@ int main()
         cout << "----------" << endl;
         cout << "(" << (turn_player.get_number() == 1 ? "WHITE" : "RED") << ") " << turn_player.get_name() << "'S TURN" << endl;
 
-        cout << "FROM: ";
+        cout << "FROM" << (!is_undone_turn && turn != 0 ? " (If you want to undo, enter 'UNDO')" : "") << ": ";
         string from_coordinates;
         getline(cin >> ws, from_coordinates);
+        if (from_coordinates == "UNDO")
+        {
+            if (turn != 0)
+            {
+                board = before;
+                turn--;
+                is_undone_turn = true;
+                continue;
+            }
+            else
+            {
+                cout << "THIS IS FIRST TURN." << endl
+                     << "enter a character to continue...";
+                getch();
+                continue;
+            }
+        }
+
         Pos from = Pos::interpret_coordinates(from_coordinates);
 
         if (!board.is_in_range(from) || board.is_empty(from) || board.get(from)->get_player_number() != turn_player.get_number())
@@ -92,8 +113,11 @@ int main()
             continue;
         }
 
+        before = board;
+
         board.move(from, to);
 
+        is_undone_turn = false;
         turn++;
     }
 }
