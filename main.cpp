@@ -40,11 +40,13 @@ int main()
     cout << "INPUT PLAYER1'S NAME: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin >> ws, name);
+    // set player1's data
     board.players[0].set_name(name);
     board.players[0].set_number(1);
 
     cout << "INPUT PLAYER2'S NAME: ";
     getline(cin >> ws, name);
+    // set player2's data
     board.players[1].set_name(name);
     board.players[1].set_number(2);
 
@@ -73,6 +75,7 @@ int main()
             // if this is not first turn, able to undo.
             if (turn != 0)
             {
+                // undo successfully
                 board = before;
                 turn--;
                 is_undone_turn = true;
@@ -92,6 +95,8 @@ int main()
         Pos from = Pos::interpret_coordinates(from_coordinates);
 
         // check if this is valid piece to move.
+        // from coordinates should be in the board & piece from 'from' coordinates should not be empty
+        // & player of piece from 'from' coordinates should be current turn player.
         if (!board.is_in_range(from) || board.is_empty(from) || board.get(from)->get_player_number() != turn_player.get_number())
         {
             cout << "THERE IS NO MY PIECE." << endl
@@ -111,7 +116,7 @@ int main()
         // check if this is valid piece (inside the board).
         if (!board.is_in_range(to))
         {
-            cout << "THERE IS NO MY PIECE." << endl
+            cout << "THERE IS NO VALID DESTINATION." << endl
                  << "enter a character to continue...";
             getch();
             continue;
