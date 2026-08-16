@@ -11,13 +11,13 @@ Board::Board(int rows, int cols)
     this->cols = cols;
     board.resize(rows, vector<Piece *>(cols, nullptr));
 
-    // 보드 상단 3행에 플레이어1의 일반 말 배치하기 (홀수 칸만 사용하기)
+    // Place player 1's regular pieces on the top 3 rows (only on odd squares)
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < cols; j++)
             if ((i + j) % 2 == 1)
                 board[i][j] = new Man(1);
 
-    // 보드 하단 3행에 플레이어2의 일반 말 배치하기 (홀수 칸만 사용하기)
+    // Place player 2's regular pieces on the bottom 3 rows (only on odd squares)
     for (int i = rows - 1; i >= rows - 3; i--)
         for (int j = 0; j < cols; j++)
             if ((i + j) % 2 == 1)
@@ -77,22 +77,22 @@ int Board::move(Pos from, Pos to)
         return -1;
     }
 
-    // 말을 목적지로 이동시키기
+    // Move the piece to the destination
     set(to, p);
     set(from, nullptr);
 
     int player = p->get_player_number();
-    int dr = to.get_x() - from.get_x(); // 행 이동량 (to - from)
-    int dc = to.get_y() - from.get_y(); // 열 이동량 (to - from)
-    int steps = dr > 0 ? dr : -dr;      // 이동 칸 수 |dr|
+    int dr = to.get_x() - from.get_x(); // Row delta (to - from)
+    int dc = to.get_y() - from.get_y(); // Column delta (to - from)
+    int steps = dr > 0 ? dr : -dr;      // Number of squares moved |dr|
 
-    // 점프 이동인 경우 경로 위의 상대 말 제거하기
+    // If it's a jump move, remove the opponent's piece along the path
     if (steps > 1)
     {
-        // 이동 방향으로 한 칸씩 이동하는 단위 벡터 (+1 또는 -1)
+        // Unit vector for moving one square at a time in the movement direction (+1 or -1)
         int row_step = dr > 0 ? 1 : -1;
         int col_step = dc > 0 ? 1 : -1;
-        // from과 to 사이를 순회하며 처음 발견된 상대 말 제거하기
+        // Walk between from and to, removing the first opponent piece found
         for (int s = 1; s < steps; s++)
         {
             Pos mid(from.get_x() + s * row_step, from.get_y() + s * col_step);
@@ -107,7 +107,7 @@ int Board::move(Pos from, Pos to)
         }
     }
 
-    // 일반 말이 상대 진영 끝에 도달한 경우 킹으로 승격하기
+    // Promote a regular piece to a king if it reaches the opponent's back row
     if (!p->is_king_piece())
     {
         int player = p->get_player_number();
@@ -127,16 +127,16 @@ void Board::print_board() const
 {
     Player player1 = players[0], player2 = players[1];
 
-    // 대전 제목 출력하기
+    // Print the match title
     cout << endl;
     cout << player1.get_name() << " VS " << player2.get_name() << endl;
     cout << endl;
 
-    // 플레이어1 상태 출력하기
+    // Print player 1's status
     cout << "[ WHITE: " << player1.get_name() << ", WON PIECES : " << player1.get_won_pieces() << " ]" << endl;
     cout << endl;
 
-    // 보드 상단 구분선 출력하기
+    // Print the top border of the board
     cout << "   +";
     for (int j = 0; j < cols; j++)
         cout << "---+";
@@ -144,11 +144,11 @@ void Board::print_board() const
 
     for (int i = 0; i < rows; ++i)
     {
-        // 행 좌표 출력하기 (0~9는 숫자, 10 이상은 알파벳으로 표시하기)
+        // Print the row coordinate (digits for 0-9, letters for 10 and above)
         cout << " " << (i >= 10 ? (char)(i - 10 + 'A') : (char)(i + '0')) << " |";
         for (int j = 0; j < cols; j++)
         {
-            // 말이 있는 경우 해당 말의 표시 문자 출력하기, 없으면 빈 칸 출력하기
+            // Print the piece's symbol if present, otherwise print a blank square
             if (board[i][j] == nullptr)
                 cout << " " << ' ' << " |";
             else
@@ -163,11 +163,11 @@ void Board::print_board() const
     }
     cout << "     ";
 
-    // 열 좌표 출력하기 (A부터 시작하는 알파벳으로 표시하기)
+    // Print the column coordinates (letters starting from A)
     for (int i = 0; i < cols; i++)
         cout << (char)(i + 'A') << "   ";
 
-    // 플레이어2 상태 출력하기
+    // Print player 2's status
     cout << endl
          << endl;
     cout << "[ RED: " << player2.get_name() << ", WON PIECES : " << player2.get_won_pieces() << " ]" << endl;

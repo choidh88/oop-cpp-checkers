@@ -2,20 +2,20 @@
 #define __POS_H__
 #include <iostream>
 
-// 보드 위의 좌표(행·열)를 저장하는 클래스
+// Class that stores a coordinate (row, column) on the board
 class Pos
 {
-    int x, y; // x: 행 인덱스, y: 열 인덱스
+    int x, y; // x: row index, y: column index
 
 public:
     Pos(int x = 0, int y = 0);
-    // 행 인덱스 반환하기
+    // Return the row index
     int get_x() const;
-    // 열 인덱스 반환하기
+    // Return the column index
     int get_y() const;
 
 public:
-    // 문자열 좌표를 Pos 인스턴스로 변환하기
+    // Convert a string coordinate into a Pos instance
     static Pos interpret_coordinates(std::string coordinate);
 };
 

@@ -6,45 +6,45 @@
 
 class Board;
 
-// 모든 말의 공통 속성과 인터페이스를 정의하는 추상 기반 클래스
+// Abstract base class defining the common properties and interface for all pieces
 class Piece
 {
 protected:
-    int player_number; // 이 말을 소유한 플레이어 번호 (1 또는 2)
-    bool is_king;      // 킹 여부
+    int player_number; // The number of the player who owns this piece (1 or 2)
+    bool is_king;      // Whether this piece is a king
 
 public:
     Piece(int num, bool is_king);
     virtual ~Piece() = default;
-    // 플레이어 번호와 말 종류(일반/킹)에 따른 표시 문자 반환하기
+    // Return the display character based on the player number and piece type (man/king)
     virtual char get_symbol() const = 0;
-    // 이 말을 소유한 플레이어 번호 반환하기
+    // Return the number of the player who owns this piece
     int get_player_number() const;
-    // 킹 말인지 확인하기
+    // Check whether this piece is a king
     bool is_king_piece() const;
-    // from 좌표에서 to 좌표로 이동 가능한지 확인하기
+    // Check whether it's possible to move from `from` to `to`
     virtual bool can_move(Board &board, Pos from, Pos to) const = 0;
 };
 
-// 일반 말: 대각선 1칸 이동 또는 2칸 점프만 가능한 클래스
+// Regular piece: a class that can only move one diagonal square or jump two squares
 class Man : public Piece
 {
 public:
     Man(int num);
-    // 플레이어 번호에 따른 소문자 표시 문자 반환하기
+    // Return the lowercase display character based on the player number
     char get_symbol() const override;
-    // from 좌표에서 to 좌표로 이동 가능한지 확인하기
+    // Check whether it's possible to move from `from` to `to`
     bool can_move(Board &board, Pos from, Pos to) const override;
 };
 
-// 킹 말: 거리 제한 없이 대각선 이동이 가능한 클래스
+// King piece: a class that can move diagonally with no distance limit
 class King : public Piece
 {
 public:
     King(int num);
-    // 플레이어 번호에 따른 대문자 표시 문자 반환하기
+    // Return the uppercase display character based on the player number
     char get_symbol() const override;
-    // from 좌표에서 to 좌표로 이동 가능한지 확인하기
+    // Check whether it's possible to move from `from` to `to`
     bool can_move(Board &board, Pos from, Pos to) const override;
 };
 

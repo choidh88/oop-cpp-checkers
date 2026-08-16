@@ -45,21 +45,21 @@ bool Man::can_move(Board &board, Pos from, Pos to) const
     int adr = (dr > 0) ? dr : -dr; // |dr|
     int adc = (dc > 0) ? dc : -dc; // |dc|
 
-    // 대각선 이동이 아니거나 제자리인 경우 이동 불가하기
+    // Not allowed if the move isn't diagonal or stays in place
     if (adr != adc || adr == 0)
         return false;
 
-    // 1칸 이동: 목적지가 빈 칸인 경우만 허용하기
+    // One-square move: only allowed if the destination is empty
     if (adr == 1)
         return board.is_empty(to);
 
-    // 2칸 점프: 목적지가 비어 있고, 중간 칸에 말이 있는 경우만 허용하기
+    // Two-square jump: only allowed if the destination is empty and a piece sits in the middle square
     if (adr == 2)
     {
         if (!board.is_empty(to))
             return false;
 
-        // 중간 칸 좌표 계산하기
+        // Compute the middle square's coordinates
         Pos mid(from.get_x() + dr / 2, from.get_y() + dc / 2);
 
         if (board.is_empty(mid))
@@ -95,24 +95,24 @@ bool King::can_move(Board &board, Pos from, Pos to) const
     int j = from.get_x(), k = from.get_y();
     int l = to.get_x(), m = to.get_y();
 
-    // 이동 방향 계산하기
-    int dr = l - j; // 행 이동량 (to - from)
-    int dc = m - k; // 열 이동량 (to - from)
+    // Compute the movement direction
+    int dr = l - j; // Row delta (to - from)
+    int dc = m - k; // Column delta (to - from)
 
-    // 대각선 이동인지 확인하기 (|dr| == |dc|, dr != 0)
+    // Check whether the move is diagonal (|dr| == |dc|, dr != 0)
     if (dr == 0 || dr * dr != dc * dc)
         return false;
 
-    // 목적지가 빈 칸인지 확인하기
+    // Check whether the destination is empty
     if (!board.is_empty(to))
         return false;
 
-    // 이동 방향으로 한 칸씩 이동하는 단위 벡터 (+1 또는 -1)
+    // Unit vector for moving one square at a time in the movement direction (+1 or -1)
     int row_step = dr > 0 ? 1 : -1;
     int col_step = dc > 0 ? 1 : -1;
-    int steps = dr * row_step; // 이동 칸 수 |dr|
+    int steps = dr * row_step; // Number of squares moved |dr|
 
-    // 경로 순회하기: 킹은 상대 말을 최대 1개만 넘을 수 있고, 아군 말은 이동 불가하기
+    // Walk the path: a king may jump over at most one opponent piece, and cannot move through its own pieces
     int opponent_count = 0;
     for (int step = 1; step < steps; step++)
     {
@@ -120,13 +120,13 @@ bool King::can_move(Board &board, Pos from, Pos to) const
         if (!board.is_empty(current_pos))
         {
             char symbol = board.get(current_pos)->get_symbol();
-            // 현재 칸에 있는 말이 상대 말인지 확인하기
+            // Check whether the piece on the current square belongs to the opponent
             bool is_opponent = (player_number == 1) ? (symbol == 'r' || symbol == 'R')
                                                     : (symbol == 'w' || symbol == 'W');
             if (!is_opponent)
-                return false; // 아군 말이 경로에 있으면 이동 불가하기
+                return false; // Cannot move if a friendly piece is on the path
             if (++opponent_count > 1)
-                return false; // 상대 말이 2개 이상이면 이동 불가하기
+                return false; // Cannot move if there are 2 or more opponent pieces
         }
     }
 
